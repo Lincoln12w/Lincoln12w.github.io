@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="为了防止有人私自用U盘拷贝东西，设置U盘拷贝密码。 以root权限挂载U盘，并设置U盘访问权限为755。  Config The main idea is to use udev to control the access of device. udev-rules10-udev-copy-control.rules123KERNEL==&amp;quot;sd[b-z]&amp;quot;, NAME=&amp;quo">
+<meta name="keywords" content="tech">
+<meta property="og:type" content="article">
+<meta property="og:title" content="copy control on USB">
+<meta property="og:url" content="http://lincoln12w.github.io/2017/05/01/copy-control/index.html">
+<meta property="og:site_name" content="Lychee Tree">
+<meta property="og:description" content="为了防止有人私自用U盘拷贝东西，设置U盘拷贝密码。 以root权限挂载U盘，并设置U盘访问权限为755。  Config The main idea is to use udev to control the access of device. udev-rules10-udev-copy-control.rules123KERNEL==&amp;quot;sd[b-z]&amp;quot;, NAME=&amp;quo">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-05-01T11:12:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="copy control on USB">
+<meta name="twitter:description" content="为了防止有人私自用U盘拷贝东西，设置U盘拷贝密码。 以root权限挂载U盘，并设置U盘访问权限为755。  Config The main idea is to use udev to control the access of device. udev-rules10-udev-copy-control.rules123KERNEL==&amp;quot;sd[b-z]&amp;quot;, NAME=&amp;quo">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/TreeOfLive.jpg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/TreeOfLive.jpg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/TreeOfLive.jpg">
+          
+        
+    
+    <!-- title -->
+    <title>copy control on USB</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+    <link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+    <!-- jquery -->
+    <script src="/lib/jquery/jquery.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="banner">
+<div id="blogtitel" class="blogtitel">Lychee Tree</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Blogs</a></li>
+         
+          <li><a href="http://github.com/lincoln12w">Projs</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2017/09/23/Fibonacci/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover='$("#i-prev").toggle();' onmouseout='$("#i-prev").toggle();'></i></a></li>
+        
+        
+        <li><a class="icon" href="/2017/04/30/rm--rf/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://lincoln12w.github.io/2017/05/01/copy-control/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://lincoln12w.github.io/2017/05/01/copy-control/&text=copy control on USB"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://lincoln12w.github.io/2017/05/01/copy-control/&is_video=false&description=copy control on USB"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=copy control on USB&body=Check out this article: http://lincoln12w.github.io/2017/05/01/copy-control/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://lincoln12w.github.io/2017/05/01/copy-control/&name=copy control on USB&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#config"><span class="toc-number">1.</span> <span class="toc-text"> Config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notes"><span class="toc-number">2.</span> <span class="toc-text"> Notes</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        copy control on USB
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Lychee Tree</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-05-01T08:32:23.000Z" itemprop="datePublished">2017-05-01</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/tech/">tech</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>为了防止有人私自用U盘拷贝东西，设置U盘拷贝密码。</p>
+<p>以root权限挂载U盘，并设置U盘访问权限为755。</p>
+<h2 id="config"><a class="markdownIt-Anchor" href="#config"></a> Config</h2>
+<p>The main idea is to use <code>udev</code> to control the access of device.</p>
+<figure class="highlight plain"><figcaption><span>udev-rules</span><a href="https://github.com/Lincoln12w/works-on-linux/blob/master/udev-copy-control/10-udev-copy-control.rules" target="_blank" rel="external">10-udev-copy-control.rules</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">KERNEL==&quot;sd[b-z]&quot;, NAME=&quot;%k&quot;, SYMLINK=&quot;udisk&quot;, GROUP=&quot;root&quot;, OPTIONS=&quot;last_rule&quot;</div><div class="line">ACTION==&quot;add&quot;, KERNEL==&quot;sd[b-z][0-9]&quot;, RUN+=&quot;/bin/sh /utils/addUSBDev.sh %k&quot;, OPTIONS=&quot;last_rule&quot;</div><div class="line">ACTION==&quot;remove&quot;, KERNEL==&quot;sd[b-z][0-9]&quot;, RUN+=&quot;/bin/sh /utils/rmUSBDev.sh %k&quot;, OPTIONS=&quot;last_rule&quot;</div></pre></td></tr></table></figure>
+<p>Use <code>blkid</code> to get device information, mainly the <code>LABEL</code> of the USB device.</p>
+<figure class="highlight bash"><figcaption><span>addUSBDev.sh</span><a href="https://github.com/Lincoln12w/works-on-linux/blob/master/udev-copy-control/addUSBDev.sh" target="_blank" rel="external">addUSBDev.sh</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Get device LABEL by blkid</span></div><div class="line">str=$(blkid -s LABEL /dev/<span class="variable">$1</span>)</div><div class="line">str=<span class="variable">$&#123;str%\"*&#125;</span></div><div class="line">str=<span class="variable">$&#123;str##*\"&#125;</span></div><div class="line"></div><div class="line"><span class="comment"># create a mount point</span></div><div class="line">mkdir -p /media/usb/<span class="variable">$1</span>/<span class="variable">$str</span></div><div class="line"></div><div class="line"><span class="comment"># mount the usb device on /media/usb/</span></div><div class="line">mount -t auto -o dmask=022 /dev/<span class="variable">$1</span> /media/usb/<span class="variable">$1</span>/<span class="variable">$str</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>rmUSBDev.sh</span><a href="https://github.com/Lincoln12w/works-on-linux/blob/master/udev-copy-control/rmUSBDev.sh" target="_blank" rel="external">rmUSBDev.sh</a></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># kill all processes using this device</span></div><div class="line">fuser -km /media/usb/<span class="variable">$1</span>/*</div><div class="line"></div><div class="line"><span class="comment"># umount the device</span></div><div class="line">umount /media/usb/<span class="variable">$1</span>/*</div><div class="line"></div><div class="line"><span class="comment"># clean the mount point</span></div><div class="line">rmdir /media/usb/<span class="variable">$1</span>/* /media/usb/<span class="variable">$1</span></div></pre></td></tr></table></figure>
+<h2 id="notes"><a class="markdownIt-Anchor" href="#notes"></a> Notes</h2>
+<p>Becareful with <code>rmUSBDev.sh</code>, whatever done in this script will not output any message on terminal, not generate any error or warming, and run as <strong>root</strong>.</p>
+<p>Actually, the initial version use <code>rm -rf /media/udisk</code> to clean the work directory, when I modify it with <code>rm -rf /media/%c</code> and has error when execute the early <code>RUN</code>, it become <code>rm -rf /media/</code>, with the USB plugout, all disks mounted under <code>/media/</code> are cleaned!!!</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Blogs</a></li>
+         
+          <li><a href="http://github.com/lincoln12w">Projs</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#config"><span class="toc-number">1.</span> <span class="toc-text"> Config</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#notes"><span class="toc-number">2.</span> <span class="toc-text"> Notes</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://lincoln12w.github.io/2017/05/01/copy-control/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://lincoln12w.github.io/2017/05/01/copy-control/&text=copy control on USB"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://lincoln12w.github.io/2017/05/01/copy-control/&is_video=false&description=copy control on USB"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=copy control on USB&body=Check out this article: http://lincoln12w.github.io/2017/05/01/copy-control/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://lincoln12w.github.io/2017/05/01/copy-control/&title=copy control on USB"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://lincoln12w.github.io/2017/05/01/copy-control/&name=copy control on USB&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2017 Lincoln12w
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Blogs</a></li>
+         
+          <li><a href="http://github.com/lincoln12w">Projs</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+      <script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- Google Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'lincoln12w';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
