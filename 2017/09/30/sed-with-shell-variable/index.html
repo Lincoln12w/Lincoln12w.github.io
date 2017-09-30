@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="有个事情需要在sed命令中使用shell脚本里的变量，折腾了好久终于解决，在这里记录下解决方案  Sed Assume we have a text: 123# confhome = /home/user/dir = $&amp;#123;TargetDir&amp;#125;/bin and a shell script to replace the ${TargetDir} with the true pa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sed_with_shell_variable">
+<meta property="og:url" content="http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/index.html">
+<meta property="og:site_name" content="Lychee Tree">
+<meta property="og:description" content="有个事情需要在sed命令中使用shell脚本里的变量，折腾了好久终于解决，在这里记录下解决方案  Sed Assume we have a text: 123# confhome = /home/user/dir = $&amp;#123;TargetDir&amp;#125;/bin and a shell script to replace the ${TargetDir} with the true pa">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/sed.jpg">
+<meta property="og:updated_time" content="2017-09-30T09:44:49.498Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sed_with_shell_variable">
+<meta name="twitter:description" content="有个事情需要在sed命令中使用shell脚本里的变量，折腾了好久终于解决，在这里记录下解决方案  Sed Assume we have a text: 123# confhome = /home/user/dir = $&amp;#123;TargetDir&amp;#125;/bin and a shell script to replace the ${TargetDir} with the true pa">
+<meta name="twitter:image" content="http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/sed.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/TreeOfLive.jpg">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/TreeOfLive.jpg" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/TreeOfLive.jpg">
+          
+        
+    
+    <!-- title -->
+    <title>sed_with_shell_variable</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+    <link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+    <!-- jquery -->
+    <script src="/lib/jquery/jquery.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="banner">
+<div id="blogtitel" class="blogtitel">Lychee Tree</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Blogs</a></li>
+         
+          <li><a href="http://github.com/lincoln12w">Projs</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2017/09/23/Fibonacci/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&text=sed_with_shell_variable"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&is_video=false&description=sed_with_shell_variable"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=sed_with_shell_variable&body=Check out this article: http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&name=sed_with_shell_variable&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sed"><span class="toc-number">1.</span> <span class="toc-text"> Sed</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#first-recall-the-sed-command-with-option-s"><span class="toc-number">1.1.</span> <span class="toc-text"> First, recall the sed command with option s</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#two-expand-the-variable-in-sed-expression"><span class="toc-number">1.2.</span> <span class="toc-text"> Two, expand the Variable in sed expression</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#so-far-so-good"><span class="toc-number">1.3.</span> <span class="toc-text"> So far so good</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        sed_with_shell_variable
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Lychee Tree</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-09-30T08:51:58.000Z" itemprop="datePublished">2017-09-30</time>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="/2017/09/30/sed-with-shell-variable/sed.jpg" alt=""></p>
+<p>有个事情需要在sed命令中使用shell脚本里的变量，折腾了好久终于解决，在这里记录下解决方案</p>
+<h2 id="sed"><a class="markdownIt-Anchor" href="#sed"></a> Sed</h2>
+<p>Assume we have a text:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># conf</div><div class="line">home = /home/user/</div><div class="line">dir = $&#123;TargetDir&#125;/bin</div></pre></td></tr></table></figure>
+<p>and a shell script to replace the <code>${TargetDir}</code> with the true path:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line">TargetDir=home</div><div class="line">TestDir=lincoln</div><div class="line"></div><div class="line">sed -i `expression` conf</div></pre></td></tr></table></figure>
+<h3 id="first-recall-the-sed-command-with-option-s"><a class="markdownIt-Anchor" href="#first-recall-the-sed-command-with-option-s"></a> First, recall the <code>sed</code> command with option <code>s</code></h3>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed <span class="string">'s/$&#123;TargetDir&#125;/$&#123;TestDir&#125;/g'</span></div></pre></td></tr></table></figure>
+<p>The string <code>${TargetDir}</code> will be replaced by string <code>${TestDir}</code>, which occurs:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># conf</div><div class="line">home = /home/user/</div><div class="line">dir = $&#123;TestDir&#125;/bin</div></pre></td></tr></table></figure>
+<h3 id="two-expand-the-variable-in-sed-expression"><a class="markdownIt-Anchor" href="#two-expand-the-variable-in-sed-expression"></a> Two, expand the Variable in <code>sed</code> expression</h3>
+<p>There are two ways:</p>
+<ul>
+<li>Add <code>''</code> around the shell variable need to be expanded.</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed <span class="string">'s/$&#123;TargetDir&#125;/'</span><span class="variable">$&#123;TestDir&#125;</span><span class="string">'/g'</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># conf</div><div class="line">home = /home/user/</div><div class="line">dir = lincoln/bin</div></pre></td></tr></table></figure>
+<ul>
+<li>Use <code>&quot;&quot;</code> instead of <code>''</code> around the <code>sed</code> expression to expand all shell variables.</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed <span class="string">"s/<span class="variable">$&#123;TargetDir&#125;</span>/<span class="variable">$&#123;TestDir&#125;</span>/g"</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># conf</div><div class="line">home = /lincoln/user/</div><div class="line">dir = $&#123;TargetDir&#125;/bin</div></pre></td></tr></table></figure>
+<p>To un-expand the shell variable, use <code>\$</code> to escape the translation</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed <span class="string">"s/\$&#123;TargetDir&#125;/<span class="variable">$&#123;TestDir&#125;</span>/g"</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># conf</div><div class="line">home = /home/user/</div><div class="line">dir = lincoln/bin</div></pre></td></tr></table></figure>
+<h3 id="so-far-so-good"><a class="markdownIt-Anchor" href="#so-far-so-good"></a> So far so good</h3>
+<p>The solution 2 and 3 works fine, but when there has <code>/</code> in the variable, an error will occur: <code>sed: -e expression #1, char 10: unknown option to 's'</code>, because the expanded expression has too many <code>/</code>. That what confused me this afternoon.</p>
+<p>To solve this, just to use <code>#</code> instead of <code>/</code> to separate in the sed expression.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed <span class="string">"s#\$&#123;TargetDir&#125;#<span class="variable">$TestDir</span>#g"</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># conf</div><div class="line">home = /home/user/</div><div class="line">dir = lincoln/bin</div></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Blogs</a></li>
+         
+          <li><a href="http://github.com/lincoln12w">Projs</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sed"><span class="toc-number">1.</span> <span class="toc-text"> Sed</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#first-recall-the-sed-command-with-option-s"><span class="toc-number">1.1.</span> <span class="toc-text"> First, recall the sed command with option s</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#two-expand-the-variable-in-sed-expression"><span class="toc-number">1.2.</span> <span class="toc-text"> Two, expand the Variable in sed expression</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#so-far-so-good"><span class="toc-number">1.3.</span> <span class="toc-text"> So far so good</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&text=sed_with_shell_variable"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&is_video=false&description=sed_with_shell_variable"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=sed_with_shell_variable&body=Check out this article: http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&title=sed_with_shell_variable"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://lincoln12w.github.io/2017/09/30/sed-with-shell-variable/&name=sed_with_shell_variable&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2017 Lincoln12w
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Blogs</a></li>
+         
+          <li><a href="http://github.com/lincoln12w">Projs</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+      <script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- Google Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'lincoln12w';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
+    </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
