@@ -6,13 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Lychee Tree">
-<meta property="og:url" content="http://lincoln12w.github.io/tags/algorithm/index.html">
+    <meta name="description" content="Keychain Add a keychain account Usage: 12passwd=&quot;$(security find-generic-password -l alfred_sudo_plugin -w)&quot;echo $passwd | sudo grep Google /Users/xxx/passwds.12w ref: 使用Alfred切换网络代理">
+<meta property="og:type" content="website">
+<meta property="og:title" content="alfred_with_sudo_script">
+<meta property="og:url" content="http://lincoln12w.github.io/draft/alfred-with-sudo-script.html">
 <meta property="og:site_name" content="Lychee Tree">
+<meta property="og:description" content="Keychain Add a keychain account Usage: 12passwd=&quot;$(security find-generic-password -l alfred_sudo_plugin -w)&quot;echo $passwd | sudo grep Google /Users/xxx/passwds.12w ref: 使用Alfred切换网络代理">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-10-14T14:04:17.474Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lychee Tree">
+<meta name="twitter:title" content="alfred_with_sudo_script">
+<meta name="twitter:description" content="Keychain Add a keychain account Usage: 12passwd=&quot;$(security find-generic-password -l alfred_sudo_plugin -w)&quot;echo $passwd | sudo grep Google /Users/xxx/passwds.12w ref: 使用Alfred切换网络代理">
     
     
         
@@ -32,7 +36,7 @@
         
     
     <!-- title -->
-    <title>Lychee Tree</title>
+    <title>alfred_with_sudo_script</title>
     <!-- styles -->
     <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/lib/meslo-LG/styles.css">
@@ -106,26 +110,19 @@
 </header>
 
           
-          <ul class="post-list">
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
   
-    <li class="post-item">
-      
-    <div class="meta">
-        <time datetime="2017-09-22T16:15:10.000Z" itemprop="datePublished">2017-09-23</time>
-    </div>
 
+  <div class="content" itemprop="articleBody">
+    <h2 id="keychain"><a class="markdownIt-Anchor" href="#keychain"></a> Keychain</h2>
+<p>Add a keychain account</p>
+<p>Usage:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">passwd=<span class="string">"<span class="variable">$(security find-generic-password -l alfred_sudo_plugin -w)</span>"</span></div><div class="line"><span class="built_in">echo</span> <span class="variable">$passwd</span> | sudo grep Google /Users/xxx/passwds.12w</div></pre></td></tr></table></figure>
+<p>ref:</p>
+<p><a href="http://blog.miaozhaofeng.cn/post/mac/shi-yong-alfredqie-huan-wang-luo-dai-li" target="_blank" rel="external">使用Alfred切换网络代理</a></p>
 
-      <span>
-    
-        <a class="" href="/2017/09/23/Fibonacci/">Fibonacci</a>
-    
-
-
-<span>
-    </li>
-  
-</ul>
-
+  </div>
+</article>
 
       </div>
       
@@ -161,7 +158,7 @@
             var dsq = document.createElement('script');
             dsq.type = 'text/javascript';
             dsq.async = true;
-            dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
         }());
     </script>
