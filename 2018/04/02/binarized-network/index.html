@@ -13,13 +13,13 @@
 <meta property="og:site_name" content="Lychee Tree">
 <meta property="og:description" content="Deep neural networks often suffer from over-parametrization and large amounts of redundancy in their models. Which call for many resources (processing power, memory, battery time, etc), and sometimes">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://lincoln12w.github.io/2018/04/02/binarized-network/deep-learning/Rastegari_2016_xornet.png">
-<meta property="og:image" content="http://lincoln12w.github.io/2018/04/02/binarized-network/deep-learning/Rastegari_2016_block_structure.png">
-<meta property="og:updated_time" content="2018-04-02T14:42:37.432Z">
+<meta property="og:image" content="http://lincoln12w.github.io/2018/04/02/binarized-network/Rastegari_2016_xornet.png">
+<meta property="og:image" content="http://lincoln12w.github.io/2018/04/02/binarized-network/Rastegari_2016_block_structure.png">
+<meta property="og:updated_time" content="2018-04-02T14:46:09.476Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="binarized_network">
 <meta name="twitter:description" content="Deep neural networks often suffer from over-parametrization and large amounts of redundancy in their models. Which call for many resources (processing power, memory, battery time, etc), and sometimes">
-<meta name="twitter:image" content="http://lincoln12w.github.io/2018/04/02/binarized-network/deep-learning/Rastegari_2016_xornet.png">
+<meta name="twitter:image" content="http://lincoln12w.github.io/2018/04/02/binarized-network/Rastegari_2016_xornet.png">
     
     
         
@@ -278,11 +278,11 @@ With the optimal solution of <span class="katex"><span class="katex-mathml"><mat
 <li>By average across the channel first and get <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">K</mi></mrow></mrow><annotation encoding="application/x-tex">\mathbf{K}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68611em;"></span><span class="strut bottom" style="height:0.68611em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathbf">K</span></span></span></span></span> which contain scaling factors <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05278em;">β</span></span></span></span> for all sub-tensors in the input <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">I</mi></mrow></mrow><annotation encoding="application/x-tex">\mathbf{I}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68611em;"></span><span class="strut bottom" style="height:0.68611em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathbf">I</span></span></span></span></span>. We have:
 <ul>
 <li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mi mathvariant="bold">I</mi></mrow><mo>∗</mo><mrow><mi mathvariant="bold">W</mi></mrow><mo>≈</mo><mo>(</mo><mrow><mi mathvariant="bold">s</mi><mi mathvariant="bold">i</mi><mi mathvariant="bold">g</mi><mi mathvariant="bold">n</mi><mo>(</mo><mi mathvariant="bold">I</mi><mo>)</mo></mrow><mo>⊗</mo><mrow><mi mathvariant="bold">s</mi><mi mathvariant="bold">i</mi><mi mathvariant="bold">g</mi><mi mathvariant="bold">n</mi><mo>(</mo><mi mathvariant="bold">W</mi><mo>)</mo></mrow><mo>)</mo><mo>⊙</mo><mrow><mi mathvariant="bold">K</mi></mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\mathbf{I} * \mathbf{W} \approx (\mathbf{sign(I)} \otimes  \mathbf{sign(W)}) \odot \mathbf{K} \alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base textstyle uncramped"><span class="mord textstyle uncramped"><span class="mord mathbf">I</span></span><span class="mbin">∗</span><span class="mord textstyle uncramped"><span class="mord mathbf" style="margin-right:0.01597em;">W</span></span><span class="mrel">≈</span><span class="mopen">(</span><span class="mord textstyle uncramped"><span class="mord mathbf">s</span><span class="mord mathbf">i</span><span class="mord mathbf" style="margin-right:0.01597em;">g</span><span class="mord mathbf">n</span><span class="mopen">(</span><span class="mord mathbf">I</span><span class="mclose">)</span></span><span class="mbin">⊗</span><span class="mord textstyle uncramped"><span class="mord mathbf">s</span><span class="mord mathbf">i</span><span class="mord mathbf" style="margin-right:0.01597em;">g</span><span class="mord mathbf">n</span><span class="mopen">(</span><span class="mord mathbf" style="margin-right:0.01597em;">W</span><span class="mclose">)</span></span><span class="mclose">)</span><span class="mbin">⊙</span><span class="mord textstyle uncramped"><span class="mord mathbf">K</span></span><span class="mord mathit" style="margin-right:0.0037em;">α</span></span></span></span><br>
-<img src="/2018/04/02/binarized-network/deep-learning/Rastegari_2016_xornet.png" alt=""></li>
+<img src="/2018/04/02/binarized-network/Rastegari_2016_xornet.png" alt=""></li>
 </ul>
 </li>
 <li>To decrease the information loss during the binarization, the structure of convolution block is changed to:<br>
-<img src="/2018/04/02/binarized-network/deep-learning/Rastegari_2016_block_structure.png" alt=""></li>
+<img src="/2018/04/02/binarized-network/Rastegari_2016_block_structure.png" alt=""></li>
 </ol>
 <blockquote>
 <p>The key difference of our method is using a <strong>scaling-factor</strong>, which does not change the order of efficiency while providing a significant improvement in accuracy.</p>
